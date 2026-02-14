@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Árbol de Amor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Te Amo', cursive, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 30px 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('fotomono.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            border-radius: 30px;
+            z-index: 0;
+        }
+
+        .container > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+                max-height: 95vh;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .message {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #6b4c8a;
+        }
+
+        .message h2 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #f5576c;
+        }
+
+        .message p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        .message .subtitle {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: #8b5a8e;
+        }
+
+        @media (max-width: 600px) {
+            .message h2 {
+                font-size: 1.1rem;
+            }
+            
+            .message p {
+                font-size: 0.85rem;
+                line-height: 1.6;
+            }
+            
+            .message .subtitle {
+                font-size: 0.8rem;
+            }
+        }
+
+        .tree-container {
+            position: relative;
+            height: 380px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: visible;
+        }
+
+        @media (max-width: 600px) {
+            .tree-container {
+                height: 300px;
+            }
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: translateX(0px) rotate(0deg); }
+            25% { transform: translateX(-15px) rotate(-2deg); }
+            75% { transform: translateX(15px) rotate(2deg); }
+        }
+
+        .trunk {
+            width: 35px;
+            height: 120px;
+            background: linear-gradient(to bottom, #8b4513, #5a2e0f);
+            border-radius: 12px;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 2;
+        }
+
+        @media (max-width: 600px) {
+            .heart {
+                font-size: 16px;
+            }
+        }
+
+        .heart:hover {
+            transform: scale(1.3) !important;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .floating-heart {
+            position: fixed;
+            font-size: 30px;
+            animation: floatUp 4s linear;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .counter {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .counter {
+                font-size: 0.85rem;
+                padding: 12px;
+            }
+        }
+
+        .footer-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: slideIn 2s ease-out;
+            max-width: 90%;
+        }
+
+        @media (max-width: 600px) {
+            .footer-message {
+                bottom: 10px;
+                padding: 10px 20px;
+            }
+            
+            .footer-message p {
+                font-size: 1rem;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                bottom: -100px;
+                opacity: 0;
+            }
+            to {
+                bottom: 20px;
+                opacity: 1;
+            }
+        }
+
+        .footer-message p {
+            color: #f5576c;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0;
+            text-align: center;
+        }
+
+        .sparkle {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 2s linear;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="message">
+            <h2>💝 Para el amor de mi vida 💝</h2>
+            <p>En un jardín lleno de flores, tú serías la más hermosa.<br>
+            En un cielo lleno de estrellas, tú serías la más brillante.<br>
+            En un mundo lleno de personas, tú serías mi única elección.</p>
+            <p class="subtitle">Entre más tiempo estoy contigo, más te amo Eva Mary...</p>
+        </div>
+
+        <div class="tree-container" id="treeContainer">
+        </div>
+
+        <div class="counter" id="counter">
+            Mi amor por ti comenzó hace:<br>
+            <span id="time">17/02/26</span>
+        </div>
+    </div>
+
+    <div class="footer-message">
+        <p>💕 Eres mi hoy y todos mis mañanas 💕</p>
+    </div>
+
+    <script>
+        // Configuración de la fecha de inicio
+        const startDate = new Date('2024-01-01T00:00:00'); // Cambia esta fecha
+
+        // Mantener tiempo fijo en 100 días
+        // (No se actualiza automáticamente)
+
+        // Crear árbol de corazones en forma de corazón
+        const treeContainer = document.getElementById('treeContainer');
+        const heartColors = ['❤️', '💗', '💖', '💕', '💓', '💝'];
+
+        function createHeartTree() {
+            // Limpiar corazones existentes
+            treeContainer.querySelectorAll('.heart').forEach(e => e.remove());
+
+            const containerWidth = treeContainer.offsetWidth;
+            const containerHeight = treeContainer.offsetHeight;
+            
+            // Parámetros para el corazón centrado
+            const scale = 7.5;
+            const centerX = containerWidth / 2;
+            const heartCenterY = containerHeight / 2 + 20; // Centrado verticalmente
+
+            // Función para verificar si un punto está dentro del corazón
+            function isInsideHeart(x, y) {
+                const nx = (x - centerX) / scale;
+                const ny = (y - heartCenterY) / scale;
+                
+                const value = Math.pow(nx * nx + ny * ny - 1, 3) - nx * nx * Math.pow(ny, 3);
+                return value <= 0.01;
+            }
+
+            // Relleno denso del corazón
+            const density = 3000;
+            const heartRadius = scale * 15;
+            const excludeCenterRadius = 60; // Radio del área central sin corazones
+
+            for (let i = 0; i < density; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.sqrt(Math.random()) * heartRadius;
+                
+                const x = centerX + Math.cos(angle) * radius;
+                const y = heartCenterY + Math.sin(angle) * radius;
+
+                // Calcular distancia al centro
+                const distToCenter = Math.sqrt(
+                    Math.pow(x - centerX, 2) + 
+                    Math.pow(y - heartCenterY, 2)
+                );
+
+                // Solo crear corazón si está dentro del corazón Y fuera del centro
+                if (isInsideHeart(x, y) && distToCenter > excludeCenterRadius) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = heartColors[Math.floor(Math.random() * heartColors.length)];
+
+                    const sizeVariation = Math.max(0, 1 - distToCenter / (heartRadius * 0.8));
+
+                    heart.style.left = `${x}px`;
+                    heart.style.bottom = `${y}px`;
+                    heart.style.fontSize = `${13 + Math.random() * 7 + sizeVariation * 3}px`;
+
+                    heart.addEventListener('click', function(e) {
+                        createFloatingHeart(e.pageX, e.pageY);
+                        createSparkles(e.pageX, e.pageY);
+                    });
+
+                    treeContainer.appendChild(heart);
+                }
+            }
+
+            // Reforzar el borde del corazón
+            for (let t = 0; t < Math.PI * 2; t += 0.025) {
+                const nx = 16 * Math.pow(Math.sin(t), 3);
+                const ny = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+                
+                const x = centerX + nx * scale * 0.98;
+                const y = heartCenterY + ny * scale * 0.98;
+
+                for (let j = 0; j < 3; j++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = heartColors[Math.floor(Math.random() * heartColors.length)];
+
+                    const jitterX = (Math.random() - 0.5) * 6;
+                    const jitterY = (Math.random() - 0.5) * 6;
+
+                    heart.style.left = `${x + jitterX}px`;
+                    heart.style.bottom = `${y + jitterY}px`;
+                    heart.style.fontSize = `${15 + Math.random() * 5}px`;
+
+                    heart.addEventListener('click', function(e) {
+                        createFloatingHeart(e.pageX, e.pageY);
+                        createSparkles(e.pageX, e.pageY);
+                    });
+
+                    treeContainer.appendChild(heart);
+                }
+            }
+
+            // Capa extra de relleno (excluyendo el centro)
+            for (let i = 0; i < 500; i++) {
+                const x = centerX + (Math.random() - 0.5) * 140;
+                const y = heartCenterY + (Math.random() - 0.5) * 160;
+
+                const distToCenter = Math.sqrt(
+                    Math.pow(x - centerX, 2) + 
+                    Math.pow(y - heartCenterY, 2)
+                );
+
+                if (isInsideHeart(x, y) && distToCenter > excludeCenterRadius) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = heartColors[Math.floor(Math.random() * heartColors.length)];
+
+                    heart.style.left = `${x}px`;
+                    heart.style.bottom = `${y}px`;
+                    heart.style.fontSize = `${14 + Math.random() * 6}px`;
+
+                    heart.addEventListener('click', function(e) {
+                        createFloatingHeart(e.pageX, e.pageY);
+                        createSparkles(e.pageX, e.pageY);
+                    });
+
+                    treeContainer.appendChild(heart);
+                }
+            }
+        }
+
+        // Crear corazón flotante al hacer click
+        function createFloatingHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = heartColors[Math.floor(Math.random() * heartColors.length)];
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        // Crear chispas
+        function createSparkles(x, y) {
+            for (let i = 0; i < 8; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = x + 'px';
+                sparkle.style.top = y + 'px';
+                
+                const angle = (Math.PI * 2 * i) / 8;
+                const distance = 50;
+                const finalX = x + Math.cos(angle) * distance;
+                const finalY = y + Math.sin(angle) * distance;
+                
+                sparkle.style.setProperty('--finalX', finalX + 'px');
+                sparkle.style.setProperty('--finalY', finalY + 'px');
+                
+                document.body.appendChild(sparkle);
+
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 2000);
+            }
+        }
+
+        // Crear corazones flotantes aleatorios
+        function createRandomFloatingHearts() {
+            setInterval(() => {
+                const x = Math.random() * window.innerWidth;
+                const y = window.innerHeight;
+                createFloatingHeart(x, y);
+            }, 3000);
+        }
+
+        // Inicializar
+        createHeartTree();
+        createRandomFloatingHearts();
+    </script>
+</body>
+</html>
